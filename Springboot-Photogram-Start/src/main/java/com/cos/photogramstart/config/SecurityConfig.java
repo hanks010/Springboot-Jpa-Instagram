@@ -1,11 +1,14 @@
 package com.cos.photogramstart.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import com.cos.photogramstart.config.oauth.OAuth2DetailsService;
 
 @EnableWebSecurity // 해당 파일로 시큐리티를 활성화
 @Configuration // ioc에 등록
@@ -15,6 +18,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 	
+	@Autowired
+	private OAuth2DetailsService oAuth2DetailsService;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -27,7 +32,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.formLogin()  //로그인 방식을 폼태그로 정하겠다.
 			.loginPage("/auth/signin") //인증할 때의 로그인 페이지 띄움, GET
 		    .loginProcessingUrl("/auth/signin") // 로그인을 실제로 할 때, POST -> 스프링 시큐리티가 로그인 프로세스 진행
-			
-			.defaultSuccessUrl("/"); //로그인을 정상적으로 처리할 때 / 경로로 가게끔 하겠다.
+			.defaultSuccessUrl("/") //로그인을 정상적으로 처리할 때 / 경로로 가게끔 하겠다.
+			.and()
+			.oauth2Login() //form 로그인도 하는데, oauth 로그인도 할 거야 
+			.userInfoEndpoint() //oauth2 로그인을 할 때 최종응답으로 회원정보를 바로 받을 수 있다(code, access token 받을 필요 없다) 
+			.userService(oAuth2DetailsService);
 	}
 }

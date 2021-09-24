@@ -25,7 +25,7 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) //번호증가전략이 데이터베이스를 따라간다.
 	private int id;
-	@Column(length = 20, unique=true,nullable=false)
+	@Column(length = 100, unique=true,nullable=false) //oAuth2 로그인을 위해 컬럼 길이 늘림
 	private String username;
 	@Column(nullable = false)
 	private String password;
