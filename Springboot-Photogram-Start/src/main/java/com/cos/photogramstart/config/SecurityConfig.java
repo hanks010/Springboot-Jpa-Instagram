@@ -26,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//super 삭제 => 기존 시큐리티가 가지고 있던 기능이 비활성화됨
 		http.csrf().disable();
 		http.authorizeRequests()
-			.antMatchers("/","/user/**","/image/**","/subscribe/**","/comment/**").authenticated() // user,image 등등 경로로 시작하는 요청은 모두 인증이 필요하다
+			.antMatchers("/","/user/**","/image/**","/subscribe/**","/comment/**","/api/**").authenticated() // user,image 등등 경로로 시작하는 요청은 모두 인증이 필요하다
 			.anyRequest().permitAll() //그 외의 경로는 인증이 필요없다.
 			.and()
 			.formLogin()  //로그인 방식을 폼태그로 정하겠다.
