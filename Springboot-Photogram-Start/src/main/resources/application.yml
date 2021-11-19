@@ -28,8 +28,8 @@ spring:
       
   servlet:
     multipart:
-      enabled: true
-      max-file-size: 2MB
+      enabled: true      #멀티파트 타입 허용
+      max-file-size: 2MB #파일 용량 제한
 
   security:
     user:
@@ -47,4 +47,4 @@ spring:
             - email
          
 file:
-  path: /Users/user/Documents/SpringBoot/upload/
+  path: /Users/user/Documents/SpringBoot/upload/ # 마지막에 /를 꼭 붙여줘야 한다, 뒤에는 파일 이름이 붙을 것이기 때문

@@ -1,7 +1,5 @@
 package com.cos.photogramstart.service;
 
-import java.sql.SQLIntegrityConstraintViolationException;
-
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
