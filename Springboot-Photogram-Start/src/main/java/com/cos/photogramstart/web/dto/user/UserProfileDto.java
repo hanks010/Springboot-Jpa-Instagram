@@ -14,5 +14,7 @@ import lombok.NoArgsConstructor;
 public class UserProfileDto {
 	private boolean PageOwnerState; // 변수명에 is 붙으면 jstl 문법에서 파싱이 잘 안된다.
 	private int imageCount; //사진 개수
+	private boolean subscribeState;
+	private int subscribeCount;
 	private User user;
 }
