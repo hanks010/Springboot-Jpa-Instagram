@@ -40,14 +40,20 @@ function getStoryItem(image) {
 	</div>
 	<div class="sl__item__img">
 		<img src="/upload/${image.postImageUrl}" />
-	</div>
+	</div>   
 	<div class="sl__item__contents">
 		<div class="sl__item__contents__icon">
-			<button>
-				<i class="fas fa-heart active" id="storyLikeIcon-1" onclick="toggleLike()"></i>
-			</button>
+			<button>`;
+
+	if (image.likeState) {
+		item += `<i class="fas fa-heart active" id="storyLikeIcon-${image.id}" onclick="toggleLike(${image.id})"></i>`;
+	} else {
+		item += `<i class="far fa-heart" id="storyLikeIcon-${image.id}" onclick="toggleLike(${image.id})"></i>`;
+	}
+
+	item += `</button>
 		</div>
-		<span class="like"><b id="storyLikeCount-1">3 </b>likes</span>
+		<span class="like"><b id="storyLikeCount-${image.id}">${image.likeCount}</b>likes</span>
 
 		<div class="sl__item__contents__content">
 			<p>${image.caption}</p>
@@ -74,29 +80,54 @@ function getStoryItem(image) {
 
 // (2) 스토리 스크롤 페이징하기
 $(window).scroll(() => {
-	console.log("윈도우 scrollTop", $(window).scrollTop());
-	console.log("문서의 높이", $(document).height()); //전체 문서의 높이
-	console.log("윈도우 높이", $(window).height());   //문서의 높이 - 윈도우 높이 = scrollTop
+	//console.log("윈도우 scrollTop", $(window).scrollTop());
+	//console.log("문서의 높이", $(document).height()); //전체 문서의 높이
+	//console.log("윈도우 높이", $(window).height());   //문서의 높이 - 윈도우 높이 = scrollTop
 
-	let checkNum = $(window).scrollTop()-($(document).height()-$(window).height());
-		console.log(checkNum);
-		
-		if(checkNum < 1 && checkNum > -1){
-			page++;
-			storyLoad();
-		}
+	let checkNum = $(window).scrollTop() - ($(document).height() - $(window).height());
+	//console.log(checkNum);
+
+	if (checkNum < 1 && checkNum > -1) {
+		page++;
+		storyLoad();
+	}
 });
 // (3) 좋아요, 안좋아요
-function toggleLike() {
-	let likeIcon = $('#storyLikeIcon-1');
-	if (likeIcon.hasClass('far')) {
-		likeIcon.addClass('fas');
-		likeIcon.addClass('active');
-		likeIcon.removeClass('far');
-	} else {
-		likeIcon.removeClass('fas');
-		likeIcon.removeClass('active');
-		likeIcon.addClass('far');
+function toggleLike(imageId) {
+	let likeIcon = $(`#storyLikeIcon-${imageId}`);
+	let likeCountStr = $(`#storyLikeCount-${imageId}`).text() // 해당하는 ID값의 텍스트값을 가져옴
+	if (likeIcon.hasClass('far')) { //좋아요 하겠다 
+
+		$.ajax({
+			type: "post",
+			url: `/api/image/${imageId}/likes`,
+			data: "json"
+		}).done(res => {
+			likeIcon.addClass('fas');
+			likeIcon.addClass('active');
+			likeIcon.removeClass('far');
+		}).fail(error => {
+			console.log("오류", error);
+		});
+
+		let likeCount = Number(likeCountStr) + 1
+		console.log("좋아요 카운트 증가", likeCount);
+		$(`#storyLikeCount-${imageId}`).text(likeCount);
+	} else { //좋아요 취소 하겠다
+		$.ajax({
+			type: "delete",
+			url: `/api/image/${imageId}/likes`,
+			data: "json"
+		}).done(res => {
+			likeIcon.removeClass('fas');
+			likeIcon.removeClass('active');
+			likeIcon.addClass('far');
+		}).fail(error => {
+			console.log("오류", error);
+		});
+		let likeCount = Number(likeCountStr) - 1
+		console.log("좋아요 카운트 감소", likeCount);
+		$(`#storyLikeCount-${imageId}`).text(likeCount);
 	}
 }
 
