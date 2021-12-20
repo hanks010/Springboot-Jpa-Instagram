@@ -8,7 +8,7 @@ import com.cos.photogramstart.domain.user.User;
 import lombok.Data;
 
 @Data
-public class ImageUploadDto {
+public class ImageUploadDto { //multipartFile과 caption을 같이 받아와야 하기 때문에 Dto를 만들어 사용한다.
 	//MultipartFile 타입에는 @Not Blank 유효성 검사가 지원이 안된다.
 	private MultipartFile file;
 	private String caption;

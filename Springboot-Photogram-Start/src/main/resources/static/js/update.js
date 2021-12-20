@@ -2,7 +2,9 @@
 function update(userid,event) {
 	event.preventDefault(); //폼태그 액션 막기
 //console.log(event);
-let data = $("#profileUpdate").serialize(); //form 태그의 id값인 profileUpdate로 form 태그 안의 정보를 가져옴
+//form 태그의 id값인 profileUpdate로 form 태그 안의 정보를 가져옴
+//key=value 데이터 던질 때 serialize 사용
+let data = $("#profileUpdate").serialize(); 
 console.log(data);
 
 $.ajax({ //ajax는 파일을 응답한다.
