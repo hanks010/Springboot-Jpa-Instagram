@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 
-	
 	private final UserRepository userRepository;
 	private final SubscribeRepository subscribeRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -58,11 +57,16 @@ public class UserService {
 		dto.setUser(userEntity);
 		dto.setImageCount(userEntity.getImages().size());
 		dto.setPageOwnerState(pageUserId == principalId); // 1은 페이지 주인, -1은 주인 아님
-		
+
 		int subscribeState = subscribeRepository.mSubscribeState(principalId, pageUserId);
 		int subscribeCount = subscribeRepository.mSubscribeCount(pageUserId);
 		dto.setSubscribeCount(subscribeCount);
 		dto.setSubscribeState(subscribeState == 1);
+
+		//좋아요 카운트 추가, 서버에서 다 만들어서 가지고 감 
+		userEntity.getImages().forEach((image) -> {
+			image.setLikeCount(image.getLikes().size());
+		});
 		return dto;
 	}
 

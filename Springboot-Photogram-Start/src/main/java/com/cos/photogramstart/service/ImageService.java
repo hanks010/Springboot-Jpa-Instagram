@@ -27,6 +27,11 @@ public class ImageService {
 
 	@Value("${file.path}") // org.springframework...
 	private String uploadFolder; // 여기에 yml에서 설정한 경로값이 담긴다.
+	
+	@Transactional(readOnly = true)
+	public List<Image> popularImages(){
+		return imageRepository.mPopular();
+	}
 
 	@Transactional(readOnly = true) // 영속성 컨텍스트 변경 감지를 해서 더티체킹, flush(DB에 반영), 하지만 readOnly가 True일 경우 안 한다
 	// @Transactional를 사용함으로써 세션을 Controller단까지 끌고 온다
